@@ -53,7 +53,7 @@ def call(Map config) {
 
       stage('Package') {
         sh "mkdir -p ${artifactDir}"
-        sh "mv -v ${config.baseDir}/target/${config.project}*.zip ${artifactDir}"
+        sh "cp -r ${config.baseDir}/target/* ${artifactDir}/"
       }
     }
 
