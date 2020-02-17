@@ -22,7 +22,6 @@ def call(Map config) {
     }
   }
 
-  container("java8-builder") {
 
     stage('Build Details') {
       echo "Project:   ${config.project}"
@@ -42,27 +41,7 @@ def call(Map config) {
       mvn "test"
       junit allowEmptyResults: true, testResults: "target/surefire-reports/*.xml"
     }
-  }
 
-  if(config.stage == 'dist') {
 
-    container('java8-builder') {
-      stage('Build Release') {
-        mvn "package"
-      }
-
-      stage('Package') {
-        sh "mkdir -p ${artifactDir}"
-        sh "cp -r ${config.baseDir}/target/* ${artifactDir}/"
-      }
-    }
-
-    stage('Archive to Jenkins') {
-      def tarName = "${config.project}-${config.component}-${config.buildNumber}.tar.gz"
-      sh "tar -czvf \"${tarName}\" -C \"${artifactDir}\" ."
-      archiveArtifacts tarName
-    }
-
-  }
 
 }
